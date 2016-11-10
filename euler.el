@@ -49,7 +49,7 @@
 
 (defun build-filename (problem-info)
   "Build a file name with PROBLEM-INFO."
-  (concat (replace-regexp-in-string " " "-" problem-info) ".py"))
+  (concat (replace-regexp-in-string " " "-" (downcase problem-info)) ".py"))
 
 (defun append-dash (problem-content)
   "Append `# ` to each PROBLEM-CONTENT."
