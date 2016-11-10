@@ -66,13 +66,19 @@
                                "\n")
                     nil filename)))
 
+(defun open-euler-file (problem-info)
+  "Open euler problem file of PROBLEM-INFO."
+  (find-file (build-filename problem-info)))
+
 ;;;###autoload
 (defun fetch-euler-problem (problem-number)
   "Fetch euler problem of PROBLEM-NUMBER."
   (interactive "nProblem Number: ")
   (let ((url (concat "https://projecteuler.net/problem=" (number-to-string problem-number))))
     (with-current-buffer (url-retrieve-synchronously url)
-      (create-euler-file (get-problem-title) (get-problem-info) (get-problem-content))
+      (let ((problem-info (get-problem-info)))
+        (create-euler-file (get-problem-title) problem-info (get-problem-content))
+        (open-euler-file problem-info))
       (message "Fetch Success!"))))
 
 (provide 'euler)
