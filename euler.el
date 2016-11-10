@@ -59,7 +59,7 @@
   "Create a euler problem file in current directory with PROBLEM-TITLE, PROBLEM-INFO and PROBLEM-CONTENT."
   (let ((filename (build-filename problem-info)))
     (append-to-file (mapconcat 'identity
-                               (append '("#!/usr/bin/env python" "#-*- coding: utf-8 -*-" "" "#")
+                               (append '("#!/usr/bin/env python" "# -*- coding: utf-8 -*-" "" "#")
                                        (list (concat "# " problem-title))
                                        '("#")
                                        (append-dash problem-content))
