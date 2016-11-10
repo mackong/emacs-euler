@@ -66,6 +66,7 @@
                                "\n")
                     nil filename)))
 
+;;;###autoload
 (defun fetch-euler-problem (problem-number)
   "Fetch euler problem of PROBLEM-NUMBER."
   (interactive "nProblem Number: ")
