@@ -27,6 +27,66 @@
 
 ;;; Code:
 
+(defgroup emacs-euler nil
+  "Customization group for `emacs-euler' package."
+  :group 'applications)
+
+(defcustom emacs-euler-default-file-suffix ".py"
+  "File suffix for new file.
+Default is python language suffix `.py'."
+  :type 'string
+  :group 'emacs-euler)
+
+(defcustom emacs-euler-default-file-header "#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+"
+  "File header for new file.
+Default is for python language.
+It can be empty if doesn't need."
+  :type 'string
+  :group 'emacs-euler)
+
+(defcustom emacs-euler-default-comment-start "#"
+  "Start part for comment.
+Default is python comment start.
+Example for c language, it should be `/*'."
+  :type 'string
+  :group 'emacs-euler)
+
+(defcustom emacs-euler-default-comment-middle "#"
+  "Middle part for comment.
+Default is python comment middle.
+Example for c language, it should be ` *'.
+It can be empty for language which support multi-line comment."
+  :type 'string
+  :group 'emacs-euler)
+
+(defcustom emacs-euler-default-comment-end "#"
+  "End part for comment.
+Default is python comment end.
+Example for c language, it should be `*/'."
+  :type 'string
+  :group 'emacs-euler)
+
+
+;;;; Variables
+(defvar emacs-euler-file-suffix emacs-euler-default-file-suffix
+  "Initial file suffix for new file.")
+
+(defvar emacs-euler-file-header emacs-euler-default-file-header
+  "Initial file header for new file.")
+
+(defvar emacs-euler-comment-start emacs-euler-default-comment-start
+  "Initial comment start.")
+
+(defvar emacs-euler-comment-middle emacs-euler-default-comment-end
+  "Initial comment middle.")
+
+(defvar emacs-euler-comment-end emacs-euler-default-comment-end
+  "Initial comment end.")
+
+;;;; Functions
 (defun get-problem-title ()
   "Get problem title."
   (goto-char (point-min))
@@ -49,27 +109,32 @@
 
 (defun build-filename (problem-info)
   "Build a file name with PROBLEM-INFO."
-  (concat (replace-regexp-in-string " " "-" (downcase problem-info)) ".py"))
+  (concat (replace-regexp-in-string " " "-" (downcase problem-info))
+          emacs-euler-file-suffix))
 
-(defun append-dash (problem-content)
-  "Append `# ` to each PROBLEM-CONTENT."
-  (mapcar (lambda (content) (concat "# " content "\n#")) problem-content))
+(defun build-problem-string (problem-title problem-info problem-content)
+  "Build a string for problem include PROBLEM-TITLE, PROBLEM-INFO, PROBLEM-CONTENT."
+  (concat emacs-euler-file-header
+          emacs-euler-comment-start "\n"
+          emacs-euler-comment-middle " " problem-title "\n"
+          (mapconcat 'identity
+                     (mapcar (lambda  (s)
+                               (concat emacs-euler-comment-middle "\n"
+                                       emacs-euler-comment-middle " " s))
+                             problem-content)
+                     "\n")
+          "\n" emacs-euler-comment-end "\n"))
 
 (defun create-euler-file (problem-title problem-info problem-content)
   "Create a euler problem file in current directory with PROBLEM-TITLE, PROBLEM-INFO and PROBLEM-CONTENT."
-  (let ((filename (build-filename problem-info)))
-    (append-to-file (mapconcat 'identity
-                               (append '("#!/usr/bin/env python" "# -*- coding: utf-8 -*-" "" "#")
-                                       (list (concat "# " problem-title))
-                                       '("#")
-                                       (append-dash problem-content))
-                               "\n")
-                    nil filename)))
+  (append-to-file (build-problem-string problem-title problem-info problem-content)
+                  nil (build-filename problem-info)))
 
 (defun open-euler-file (problem-info)
   "Open euler problem file of PROBLEM-INFO."
   (find-file (build-filename problem-info)))
 
+;;;; Interactive functions
 ;;;###autoload
 (defun fetch-euler-problem (problem-number)
   "Fetch euler problem of PROBLEM-NUMBER."
