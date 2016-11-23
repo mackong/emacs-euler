@@ -109,7 +109,7 @@ Example for c language, it should be `*/'."
 
 (defun build-filename (problem-info)
   "Build a file name with PROBLEM-INFO."
-  (concat (replace-regexp-in-string " " "-" (downcase problem-info))
+  (concat (replace-regexp-in-string " " "_" (downcase problem-info))
           emacs-euler-file-suffix))
 
 (defun build-problem-string (problem-title problem-info problem-content)
