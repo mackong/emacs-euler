@@ -103,7 +103,7 @@ Example for c language, it should be `*/'."
   "Get problem content into a list."
   (let ((content nil))
     (goto-char (point-min))
-    (while (re-search-forward "<p[^>]*>\\([^<]+?\\)</p>" nil t)
+    (while (re-search-forward "<p[^>]*>\\(.*\\)</p>" nil t)
       (setq content (append content (list (match-string 1)))))
     content))
 
