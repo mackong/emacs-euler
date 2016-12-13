@@ -143,7 +143,8 @@ Example for c language, it should be `*/'."
     (with-current-buffer (url-retrieve-synchronously url)
       (let ((problem-info (get-problem-info)))
         (create-euler-file (get-problem-title) problem-info (get-problem-content))
-        (open-euler-file problem-info))
+        (open-euler-file problem-info)
+        (goto-char (point-max)))
       (message "Fetch Success!"))))
 
 (provide 'euler)
