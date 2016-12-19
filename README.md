@@ -1,4 +1,4 @@
-# euler.el
+# emacs-euler
 
 Fetch project euler problem into file. Default is fetch to a python file.
 
